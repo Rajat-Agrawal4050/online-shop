@@ -339,9 +339,11 @@ unset($_SESSION['APPLIED_COUPON']);
                                 removeItem: id
                             },
                             success: function(data) {
-                                if (data.trim() == '1') {
+                                var resp = JSON.parse(data);
+                                if (resp.result == '1') {
                                     Swal.fire("Removed", "Item removed from cart!", "success");
                                     $(th).parent().parent().remove();
+                                    $('.cartCount').html((resp.count));
                                 } else {
                                     console.log(data);
                                     Swal.fire("Error", "Something went wrong", "error");

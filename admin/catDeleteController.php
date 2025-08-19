@@ -1,19 +1,16 @@
 <?php
-
-  include("db_con.php");
+  include("../connection.php");
     
-    $c_id=$_POST['record'];
-    $query="DELETE FROM `category` where `category_id`='$c_id'";
+    $c_id=realEscape($_POST['record']);
+    $query="DELETE FROM `category` where `id`='$c_id'";
 
-    $data=mysqli_query($con,$query);
+    $data=mysqli_query($conn,$query);
 
     if($data){
-        echo"Category Item Deleted";
-        // header("Location: viewCategories.php");
+        echo"1";
     }
     else{
-        echo"Not able to delete";
-        // header("Location: viewCategories.php");
+        echo "0";
     }
     
 ?>

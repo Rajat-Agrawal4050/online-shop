@@ -80,9 +80,9 @@ if (isset($_POST['count'])) {
     die;
 }
 
-if (isset($_POST['item']) && isset($_POST['qty'])) {
+if (isset($_POST['item1']) && isset($_POST['qty'])) {
 
-    $item_id = realEscape($_POST['item']);
+    $item_id = realEscape($_POST['item1']);
     $qty = realEscape($_POST['qty']);
 
     $res = '';
@@ -110,15 +110,58 @@ if (isset($_POST['item']) && isset($_POST['qty'])) {
     echo json_encode($obj);
     die;
 }
+if (isset($_POST['item'])) {
+
+    $item_id = realEscape($_POST['item']);
+
+    $result = use_cart_n_wishlist($item_id, 'CART', false);
+    $items = getCartItems();
+
+    class Resp
+    {
+        public $num;
+        public $res;
+
+        function set_num($no)
+        {
+            $this->num = $no;
+        }
+        function set_resp($resp)
+        {
+            $this->res = $resp;
+        }
+    }
+    $obj = new Resp();
+    $obj->set_num($items);
+    $obj->set_resp($result);
+    echo json_encode($obj);
+    die;
+}
 if (isset($_POST['wish'])) {
 
     $item_id = realEscape($_POST['wish']);
 
     $result = use_cart_n_wishlist($item_id, 'WISHLIST');
-    if ($result)
-        echo 1;
-    else
-        echo 0;
+    $items = getCartItems('WISHLIST');
+
+    class Resp
+    {
+        public $num;
+        public $res;
+
+        function set_num($no)
+        {
+            $this->num = $no;
+        }
+        function set_resp($resp)
+        {
+            $this->res = $resp;
+        }
+    }
+    $obj = new Resp();
+    $obj->set_num($items);
+    $obj->set_resp($result);
+    echo json_encode($obj);
     die;
 }
 
@@ -334,7 +377,7 @@ if (getUserID() <= 0) {
                                 </button>
                             </div>
                         </div>
-                        <button class="btn btn-primary px-3" onclick="addCart(this)" value="<?= $detail['id']; ?>"><i class="fa fa-shopping-cart mr-1"></i> Add To
+                        <button class="btn btn-primary px-3" onclick="addCart1(this)" value="<?= $detail['id']; ?>"><i class="fa fa-shopping-cart mr-1"></i> Add To
                             Cart</button>
                     </div>
                     <div class="d-flex pt-2">
@@ -654,7 +697,7 @@ if (getUserID() <= 0) {
             }
         );
 
-        function addCart(e) {
+        function addCart1(e) {
             let id = e.getAttribute("value");
             let qty = $('#itemQty').val();
 
@@ -662,7 +705,7 @@ if (getUserID() <= 0) {
                 method: "POST",
                 cache: false,
                 data: {
-                    item: id,
+                    item1: id,
                     qty: qty
                 },
                 success: function(data) {
@@ -708,9 +751,38 @@ if (getUserID() <= 0) {
                 },
                 success: function(data) {
                     console.log(data);
-                    if (data == '1') {
-                        // document.getElementsByClassName('wishCount').innerHTML = '<?= getCartItems('WISHLIST') ?>';
+                    let obj = JSON.parse(data);
+                    if (obj.res == true) {
+                        $('.wishCount').html((obj.num));
                         Swal.fire("Item Added in Wishlist.", "", "success");
+                    } else {
+                        Swal.fire("Something went wrong", "", "error");
+                    }
+
+                }
+            })
+        }
+
+        function addCart(e) {
+            let id = e.getAttribute("value");
+
+            $.ajax({
+                method: "POST",
+                cache: false,
+                data: {
+                    item: id
+                },
+                success: function(data) {
+                    console.log(data);
+                    // return;
+                    let obj = JSON.parse(data);
+                    if (obj.res == true) {
+                        $('.cartCount').html((obj.num));
+                        Swal.fire("Item added in Cart.", "", "success");
+                    } else if (obj.res == false) {
+                        Swal.fire("Error.", "", "error");
+                    } else if (obj.res == 'increamented') {
+                        Swal.fire("increamented", "", "success");
                     } else {
                         Swal.fire("Something went wrong", "", "error");
                     }

@@ -249,9 +249,44 @@ if (isset($_POST['SignUp'])) {
         }
     }
 } elseif (isset($_POST['adminLogin'])) {
+
+    $email = realEscape($_POST['email']);
+    $pass = realEscape($_POST['pass']);
+
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+
+        die("4");
+    }
+
+    $qry = "SELECT * FROM `admin` where email = '$email'";
+
+    $res = mysqli_query($conn, $qry);
+    if (!$res) {
+
+        errlog(mysqli_error($conn), $qry);
+    } else {
+
+        $result = mysqli_fetch_assoc($res);
+
+        if (isset($result['id'])) {
+
+            if (password_verify($pass, $result['password'])) {
+
+                $_SESSION['user_id'] = $result['user_id'];
+                $_SESSION['admin_id'] = $result['id'];
+
+                echo '1';
+            } else {
+
+                echo "2";
+            }
+        } else {
+            echo '3';
+        }
+    }
 } else if (isset($_POST['Logout'])) {
 
-    unset($_SESSION['user_id']);
-
-    echo 1;
+    session_unset();
+    session_destroy();
+    die('1');
 }

@@ -20,15 +20,15 @@ include 'connection.php';
             return;
         }
         if (email == '') {
-            Swal.fire("Name is Required.", "", "error");
+            Swal.fire("Email is Required.", "", "error");
             return;
         }
         if (subject == '') {
-            Swal.fire("Name is Required.", "", "error");
+            Swal.fire("Subject is Required.", "", "error");
             return;
         }
         if (message == '') {
-            Swal.fire("Name is Required.", "", "error");
+            Swal.fire("Please Enter Message.", "", "error");
             return;
         }
 
@@ -60,7 +60,9 @@ include 'connection.php';
                     $('#contactForm').trigger("reset");
                 } else if (resp == '-1') {
                     Swal.fire("Recaptcha Error, Please Try Again!", "", "error");
-                } else {
+                } else if (resp == '2') {
+                    Swal.fire("Message sent but mail error occured.", "", "error");
+                }else {
                     Swal.fire("Failed ! Message not Sent.", "", "error");
 
                 }
@@ -75,7 +77,7 @@ include 'connection.php';
             },
             complete: function() {
                 setTimeout(function() {
-                    $this.prop("disabled", false);
+                     $(this).prop("disabled", false);
                 }, 1000);
             }
         });
@@ -125,7 +127,7 @@ include 'connection.php';
                             <p class="help-block text-danger"></p>
                         </div>
                         <div>
-                            <button data-sitekey="6LdraxUnAAAAAGJgff6bYPpk6cCZ73qGSYUQV9Cz" data-callback='onSubmit' data-action='submit' class="g-recaptcha btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Send
+                            <button data-sitekey="6LfjaZEhAAAAAFLQKkIj4mFrz11ysk7Q_jSs7pnD" data-callback='onSubmit' data-action='submit' class="g-recaptcha btn btn-primary py-2 px-4" type="submit" id="sendMessageButton">Send
                                 Message</button>
                         </div>
                     </form>

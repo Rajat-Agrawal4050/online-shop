@@ -546,6 +546,7 @@ if (isset($_POST['pincode'])) {
                                             processData: false,
                                             contentType: false,
                                             success: function(data) {
+                                                console.log('verify_payment_response: '+data)
                                                 $("#paymentLoader").css("display", "none");
                                                 if (data.trim() == '1') {
                                                     if (confirm_msg) {
