@@ -371,7 +371,8 @@ if (isset($_POST['make_payment'])) {
 
     $coups_used = isset($_SESSION['APPLIED_COUPON']) ? $_SESSION['APPLIED_COUPON']['coupon_code'] : "";
 
-    $qry = "INSERT INTO `orders`(`item_id`, `user_id`, `quantity`, `amount`, `coupon_id`, `coupon_discount`, `item_discount`, `payment_status`, `payment_mode`, `address`, `order_status`, `order_date`) VALUES ('$item_ids', '$uid', '$quantities', '$amount', '$coups_used', '$total_coupon_discount', '$total_discount', 'PENDING', '$payment_mode', '$address_id', 'PENDING', '$curr_date')";
+    $qry = "INSERT INTO `orders`(`item_id`, `user_id`, `quantity`, `amount`, `coupon_id`, `coupon_discount`, `item_discount`, `payment_status`, `payment_mode`, `address`, `order_status`, `order_date`)
+     VALUES ('$item_ids', '$uid', '$quantities', '$amount', '$coups_used', '$total_coupon_discount', '$total_discount', 'PENDING', '$payment_mode', '$address_id', 'PENDING', '$curr_date')";
 
     if (!mysqli_query($conn, $qry)) {
         errlog(mysqli_error($conn), $qry);
@@ -382,7 +383,8 @@ if (isset($_POST['make_payment'])) {
 
     for ($i = 0; $i < count($item_array); $i++) {
 
-        $qry = "INSERT INTO `order_detail`(`order_id`, `item_id`, `quantity`, `price`, `discount`, `order_date`, user_id) VALUES ('$insID', '" . realEscape($item_array[$i]) . "',  '" . realEscape($quantity_array[$i]) . "', '" . realEscape($price_array[$i]) . "', '" . realEscape($discount_array[$i]) . "', '$curr_date', $uid)";
+        $qry = "INSERT INTO `order_detail`(`order_id`, `item_id`, `quantity`, `price`, `discount`, `order_date`, user_id) 
+        VALUES ('$insID', '" . realEscape($item_array[$i]) . "',  '" . realEscape($quantity_array[$i]) . "', '" . realEscape($price_array[$i]) . "', '" . realEscape($discount_array[$i]) . "', '$curr_date', $uid)";
         if (!mysqli_query($conn, $qry)) {
             errlog(mysqli_error($conn), $qry);
         }

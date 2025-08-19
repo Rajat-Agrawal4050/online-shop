@@ -219,10 +219,11 @@ if (isset($_POST['item'])) {
                                 removeWish: id
                             },
                             success: function(data) {
-                                if (data.trim() == '1') {
-
+                                let resp = JSON.parse(data);
+                                if (resp.result == '1') {
                                     Swal.fire("Removed", "Item removed from Wish List!", "success");
                                     $(th).parent().parent().remove();
+                                    $('.wishCount').html((resp.count));
                                 } else {
                                     console.log(data);
                                     Swal.fire("Error", "Something went wrong", "error");
@@ -249,10 +250,7 @@ if (isset($_POST['item'])) {
                     // return;
                     let obj = JSON.parse(data);
                     if (obj.res == true) {
-                        // document.getElementsByClassName('cartCount').innerHTML = '<?= getCartItems() ?>';
-                        // document.querySelectorAll('.cartCount').forEach(function(ele, index) {
-                        //     ele.innerHTML = '<?= getCartItems() ?>';
-                        // });
+                        $('.cartCount').html((obj.num));
                         Swal.fire("Item added in Cart.", "", "success");
                     } else if (obj.res == false) {
                         Swal.fire("Error.", "", "error");

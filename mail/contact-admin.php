@@ -3,7 +3,7 @@ session_start();
 include '../connection.php';
 include 'mailer.php';
 
-$secretKey = '6LdraxUnAAAAAPKKPrxOuDHWIHbmHFVzwLfSI6od';
+$secretKey = '6LfjaZEhAAAAABOXbq7YYxv46Wz8adDpxrR0ZY3-';
 
 if (isset($_POST['name'])) {
 
@@ -57,7 +57,7 @@ if (isset($_POST['name'])) {
       } else {
 
         if (!mail($to, $subject, $body, $header)) {
-          echo 0;
+          echo 2;
         } else {
           echo 1;
         }

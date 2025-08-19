@@ -3,17 +3,33 @@ session_start();
 include 'connection.php';
 include 'use_cart_and_wishlist.php';
 
-echo phpinfo();
+// echo phpinfo();
 
 if (isset($_POST['wish'])) {
 
     $item_id = realEscape($_POST['wish']);
 
     $result = use_cart_n_wishlist($item_id, 'WISHLIST');
-    if ($result)
-        echo 1;
-    else
-        echo 0;
+    $items = getCartItems('WISHLIST');
+
+    class Resp
+    {
+        public $num;
+        public $res;
+
+        function set_num($no)
+        {
+            $this->num = $no;
+        }
+        function set_resp($resp)
+        {
+            $this->res = $resp;
+        }
+    }
+    $obj = new Resp();
+    $obj->set_num($items);
+    $obj->set_resp($result);
+    echo json_encode($obj);
     die;
 }
 
@@ -927,7 +943,7 @@ if (isset($_POST['item'])) {
                     <div class="offer-text">
                         <h6 class="text-white text-uppercase">Save 20%</h6>
                         <h3 class="text-white mb-3">Special Offer</h3>
-                        <a href="" class="btn btn-outline-light">Shop Now</a>
+                        <a href="shop" class="btn btn-outline-light">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -937,7 +953,7 @@ if (isset($_POST['item'])) {
                     <div class="offer-text">
                         <h6 class="text-white text-uppercase">Save 20%</h6>
                         <h3 class="text-white mb-3">Special Offer</h3>
-                        <a href="" class="btn btn-outline-light">Shop Now</a>
+                        <a href="shop" class="btn btn-outline-light">Shop Now</a>
                     </div>
                 </div>
             </div>
@@ -1217,10 +1233,7 @@ if (isset($_POST['item'])) {
                     // return;
                     let obj = JSON.parse(data);
                     if (obj.res == true) {
-                        // document.getElementsByClassName('cartCount').innerHTML = '<?= getCartItems() ?>';
-                        // document.querySelectorAll('.cartCount').forEach(function(ele, index) {
-                        //     ele.innerHTML = '<?= getCartItems() ?>';
-                        // });
+                        $('.cartCount').html((obj.num));
                         Swal.fire("Item added in Cart.", "", "success");
                     } else if (obj.res == false) {
                         Swal.fire("Error.", "", "error");
@@ -1246,8 +1259,9 @@ if (isset($_POST['item'])) {
                 },
                 success: function(data) {
                     console.log(data);
-                    if (data == '1') {
-                        // document.getElementsByClassName('wishCount').innerHTML = '<?= getCartItems('WISHLIST') ?>';
+                    let obj = JSON.parse(data);
+                    if (obj.res == true) {
+                        $('.wishCount').html((obj.num));
                         Swal.fire("Item Added in Wishlist.", "", "success");
                     } else {
                         Swal.fire("Something went wrong", "", "error");

@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Oct 12, 2023 at 01:01 PM
--- Server version: 10.4.24-MariaDB
--- PHP Version: 8.1.6
+-- Generation Time: Aug 18, 2025 at 09:04 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -40,7 +40,7 @@ CREATE TABLE `address` (
   `availability` text NOT NULL,
   `address_type` text DEFAULT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `address`
@@ -60,15 +60,17 @@ CREATE TABLE `admin` (
   `id` int(20) NOT NULL,
   `user_id` int(11) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `email` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `email` varchar(50) NOT NULL,
+  `password` text NOT NULL,
+  `site_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `admin`
 --
 
-INSERT INTO `admin` (`id`, `user_id`, `name`, `email`) VALUES
-(1, 5, 'admin', 'admin@gmail.com');
+INSERT INTO `admin` (`id`, `user_id`, `name`, `email`, `password`, `site_id`) VALUES
+(1, 5, 'admin', 'admin@gmail.com', '$2y$10$y1kcSpp.eNecpxDvMoONh.ud4xFB4cE.D.JqzZ/Qn0pG2wqhZRfvS', 1);
 
 -- --------------------------------------------------------
 
@@ -87,7 +89,7 @@ CREATE TABLE `available_coupons` (
   `coupon_code` varchar(50) DEFAULT NULL,
   `redeemed` tinyint(2) NOT NULL DEFAULT 0 COMMENT '0->Not redeemed, 1->redeemed',
   `created_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `available_coupons`
@@ -96,44 +98,6 @@ CREATE TABLE `available_coupons` (
 INSERT INTO `available_coupons` (`id`, `item_id`, `coupon_id`, `user_id`, `validity`, `discount_type`, `discount`, `coupon_code`, `redeemed`, `created_date`) VALUES
 (1, 6, 2, 5, -1, 'FLAT', 20, 'f3g5dh', 0, '2023-08-25 13:04:57'),
 (2, -1, 3, 5, -1, '%', 0, 'f3g5d4', 0, '2023-08-25 13:06:46');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `brand`
---
-
-CREATE TABLE `brand` (
-  `brand_id` int(10) NOT NULL,
-  `brand_name` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `brand`
---
-
-INSERT INTO `brand` (`brand_id`, `brand_name`) VALUES
-(1, 'hp'),
-(2, 'dell'),
-(3, 'asus'),
-(4, 'samsung'),
-(5, 'boat'),
-(6, 'oppo'),
-(7, 'cobb'),
-(8, 'pantaloons'),
-(9, 'raymonds'),
-(10, 'sonata'),
-(11, 'rayban'),
-(12, 'addidas'),
-(13, 'bata'),
-(14, 'sony'),
-(15, 'canon'),
-(16, 'LG'),
-(21, 'titan'),
-(23, 'Apple'),
-(24, 'Himalaya'),
-(25, 'Fast Track'),
-(26, 'Red Chief');
 
 -- --------------------------------------------------------
 
@@ -149,7 +113,7 @@ CREATE TABLE `cart_items` (
   `status` int(11) NOT NULL,
   `save_type` varchar(50) NOT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `cart_items`
@@ -183,7 +147,7 @@ CREATE TABLE `category` (
   `parent_category` varchar(100) DEFAULT NULL,
   `image_url` text NOT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `category`
@@ -200,8 +164,8 @@ INSERT INTO `category` (`id`, `category_name`, `category_type`, `parent_category
 (8, 'clothing', 'main', 'null', '/img/product-7.jpg', '2023-08-14 20:34:45'),
 (9, 'camera', 'sub_category', 'Electronics', '/img/category4.png', '2023-08-14 20:34:45'),
 (11, 'Beauty & makeup', 'main', 'null', '/img/floded-03.png', '2023-08-14 20:34:45'),
-(13, 'Electronics', 'main', 'null', '/img/category6.png', '2023-08-14 20:34:45'),
-(14, 'Gadgets', 'child_category', 'mens', '/img/category3.png', '2023-08-14 20:55:24');
+(15, 'Electronics', 'main', NULL, '', '2025-08-16 19:15:17'),
+(21, 'Gadgets', 'main', NULL, 'http://localhost/online-shop/uploads/img/Screenshot 2023-05-09 112323.png', '2025-08-16 19:32:52');
 
 -- --------------------------------------------------------
 
@@ -211,17 +175,17 @@ INSERT INTO `category` (`id`, `category_name`, `category_type`, `parent_category
 
 CREATE TABLE `coupons` (
   `id` int(11) NOT NULL,
-  `type` varchar(255) COLLATE latin1_danish_ci NOT NULL,
-  `products_id` varchar(255) COLLATE latin1_danish_ci DEFAULT '0',
+  `type` varchar(255) NOT NULL,
+  `products_id` varchar(255) DEFAULT '0',
   `start_date` date NOT NULL,
   `end_date` date NOT NULL,
-  `coupon_code` varchar(255) COLLATE latin1_danish_ci NOT NULL,
+  `coupon_code` varchar(255) NOT NULL,
   `discount` int(11) NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `cat_id` varchar(255) COLLATE latin1_danish_ci DEFAULT NULL,
+  `cat_id` varchar(255) DEFAULT NULL,
   `site_id` int(11) NOT NULL,
-  `service_id` varchar(255) COLLATE latin1_danish_ci DEFAULT NULL,
-  `garment_id` varchar(255) COLLATE latin1_danish_ci DEFAULT NULL
+  `service_id` varchar(255) DEFAULT NULL,
+  `garment_id` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_danish_ci;
 
 --
@@ -256,7 +220,7 @@ CREATE TABLE `messages` (
   `attachment` text NOT NULL,
   `status` int(11) NOT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `messages`
@@ -290,7 +254,7 @@ CREATE TABLE `orders` (
   `payment_mode` varchar(50) NOT NULL,
   `order_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `order_status` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `orders`
@@ -324,14 +288,14 @@ CREATE TABLE `order_detail` (
   `coupon_discount` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   `order_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `order_detail`
 --
 
 INSERT INTO `order_detail` (`id`, `user_id`, `order_id`, `item_id`, `quantity`, `price`, `discount`, `coupon_discount`, `status`, `order_date`) VALUES
-(1, 5, 1, 6, 1, 402, 47, 0, 0, '2023-08-29 23:22:01'),
+(1, 5, 1, 6, 1, 402, 47, 0, 3, '2023-08-29 23:22:01'),
 (2, 5, 3, 1, 1, 2360, 40, 0, 0, '2023-08-30 18:20:18'),
 (3, 5, 4, 4, 1, 12473, 26, 0, 0, '2023-08-31 14:20:53'),
 (4, 5, 4, 9, 1, 1177, 23, 0, 0, '2023-08-31 14:20:53'),
@@ -339,11 +303,11 @@ INSERT INTO `order_detail` (`id`, `user_id`, `order_id`, `item_id`, `quantity`, 
 (6, 5, 5, 9, 1, 1177, 23, 0, 0, '2023-08-31 14:23:49'),
 (7, 5, 6, 6, 1, 402, 47, 0, 0, '2023-08-31 19:30:55'),
 (8, 5, 7, 24, 1, 1375, 25, 0, 0, '2023-09-02 12:59:06'),
-(9, 5, 8, 1, 1, 2360, 40, 0, 0, '2023-09-25 22:09:15'),
+(9, 5, 8, 1, 1, 2360, 40, 0, 4, '2023-09-25 22:09:15'),
 (10, 5, 9, 1, 1, 2360, 40, 0, 0, '2023-09-26 14:57:59'),
-(11, 5, 9, 10, 1, 76000, 0, 0, 0, '2023-09-26 14:57:59'),
+(11, 5, 9, 10, 1, 76000, 0, 0, 1, '2023-09-26 14:57:59'),
 (12, 5, 10, 1, 1, 2360, 40, 0, 0, '2023-09-26 14:58:57'),
-(13, 5, 10, 4, 1, 12499, 0, 0, 0, '2023-09-26 14:58:57');
+(13, 5, 10, 4, 1, 12499, 0, 0, 5, '2023-09-26 14:58:57');
 
 -- --------------------------------------------------------
 
@@ -362,27 +326,27 @@ CREATE TABLE `product` (
   `color` varchar(120) NOT NULL,
   `material` varchar(20) NOT NULL,
   `availability` varchar(20) NOT NULL,
-  `discount` varchar(20) NOT NULL,
-  `pic` varchar(20) NOT NULL,
+  `discount` varchar(20) NOT NULL COMMENT 'in percentage %',
+  `pic` varchar(100) NOT NULL,
   `description` varchar(120) NOT NULL,
   `status` int(11) NOT NULL,
   `label` int(11) NOT NULL COMMENT '0=None,1=featured,2=Sponsored\r\n',
   `views` int(11) NOT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `product`
 --
 
 INSERT INTO `product` (`id`, `Category`, `sub_cat`, `brand`, `product_name`, `price`, `size`, `color`, `material`, `availability`, `discount`, `pic`, `description`, `status`, `label`, `views`, `created_date`) VALUES
-(1, 'fashion', '', 'Pantaloons', 'Pantaloons Men Solid sporty black jacket', 2400, 'LG', 'Yellow', 'solid', 'In Stock', '40', '/img/product1.jpg', 'this jacket is more comfortable in winter seasons. similar products are aval', 1, 1, 589, '2023-08-15 16:46:14'),
+(1, 'fashion', '', 'Pantaloons', 'Pantaloons Men Solid sporty black jacket', 2400, 'L', 'Yellow', 'solid', 'In Stock', '35', '/img/product1.jpg', 'this jacket is more comfortable in winter seasons. similar products are aval', 1, 1, 589, '2023-08-15 16:46:14'),
 (2, 'Electronics', '', 'Dell', 'Dell Inspiron Ryzen 3 3254U(8GB RAM/500GB SSD', 55400, 'L', 'grey', 'metal body', 'In Stock', '0', '/img/product2.jpg', 'this is best laptop under 5k,it comes with 2gb dedicated graphics card. soud quality is high and 4.5GH processor speed ,', 1, 0, 12, '2023-08-15 19:46:14'),
 (3, 'fashion', '', 'Cobb', 'Cobb Kids face Mask with MultiColours ', 435, 'M', 'Multi-Colours', 'solid', 'In Stock', '35', '/img/product3.jpg', 'it is face mask to protect from viruses and polluted air.it made with cotton cloth and easy to fit on face.', 1, 2, 127, '2023-08-15 15:46:14'),
 (4, 'Electronics', '', 'Oppo Realme', 'realme Nazro 50A(Oxygen Blue, 128 GB) 4 GB RA', 12499, 'XL', 'Oxygen Blue', 'metal body', 'In Stock', '0', '/img/product4.jpg', 'this phone battery is 4600 mah powerfully backup and fast charging supported.', 1, 0, 2, '2023-08-15 15:46:14'),
 (6, 'Electronics', '', 'Oppo', 'Realme nazro 10(Red,In the Ear)', 449, '', 'red', 'solid', 'In Stock', '47', '/img/product8.jpg', 'It is best ear phone of boat because it provide best sound quality.', 1, 1, 31, '2023-08-15 15:46:14'),
 (8, 'Electronics', '', 'HP', 'HP Pavallion NoteBook(4GB RAM/300GBSSD)', 35000, 'XL', 'Silver Mattle', 'solid', 'In Stock', '0', '/img/product6.jpg', 'Hp Pavallion is the perfect for students and home workers. it is super fast multi processor laptop.', 1, 1, 64, '2023-08-15 15:46:14'),
-(9, 'fashion', '', 'Apollo', 'Apollo Men T-Shirt Green', 1200, 'LG', 'green', 'cotton', 'In Stock', '0', '/img/product7.jpg', 'best t-shirt under 1k.', 1, 2, 10, '2023-08-15 15:46:14'),
+(9, 'fashion', '', 'Apollo', 'Apollo Men T-Shirt Green', 1200, 'L', 'green', 'cotton', 'In Stock', '0', '/img/product7.jpg', 'best t-shirt under 1k.', 1, 2, 10, '2023-08-15 15:46:14'),
 (10, 'Electronics', '', 'Apple', 'Apple i Phone x', 76000, 'L', 'blue', 'metal blue', 'In Stock', '0', '/img/product8.jpg', 'Best i phone under 80k in deals.', 1, 0, 0, '2023-08-15 15:46:14'),
 (12, 'fashion', '', 'Rayban', 'Rayban Men Sun Glasses', 450, 'S', 'Sky blue', 'plastic', 'In Stock', '46', '/img/product14.jpg', 'best sunglasses of rayban under 500 rs.', 1, 1, 24, '2023-08-15 15:46:14'),
 (14, 'Electronics', '', 'Sonata', 'Men Watches Combo Pack of 2', 1500, 'L', 'black', '', 'In Stock', '0', '/img/product9.jpg', ' trending watches from mi. colour is black and blue.', 1, 0, 1, '2023-08-15 15:46:14'),
@@ -391,7 +355,7 @@ INSERT INTO `product` (`id`, `Category`, `sub_cat`, `brand`, `product_name`, `pr
 (19, 'Electronics', '', 'HP ', 'HP Laptop', 60000, '', 'Mattle Grey', '', 'In Stock', '40', '/img/product12.jpg', 'Best gaming laptop and color black or mattel body 500gb ssd ram is 16gb', 1, 1, 4, '2023-08-15 15:46:14'),
 (20, 'Beauty & makeup', '', 'Himalaya', 'Himalaya Neem Face Wash 400ml', 270, '', 'Green Gel', '', 'In Stock', '25', '/img/product13.jpg', 'Himalaya Neem face wash for purifying skin, bright skin. Ayurvedic Medicine for Pimples.', 1, 2, 3, '2023-08-15 15:46:14'),
 (23, 'fashion', '', 'Red Cheif', 'Red Chief Men Shoes Brown', 2400, '', 'Blue', '', 'In Stock', '0', '/img/category7.jpg', 'Pure 100% leather shoes by Red Chief. it provides better quality of leather.', 1, 1, 45, '2023-08-15 15:46:14'),
-(24, 'Gadgets', '', 'Boat', 'Boat Head Phones', 1400, '', 'color', '', 'In Stock', '25', '/img/product15.jpg', 'best quality ', 1, 0, 89, '2023-08-15 15:46:14');
+(24, 'Gadgets', '', 'Boat', 'Boat Head Phones', 1400, 'null', 'color', '', 'In Stock', '21', '/img/product15.jpg', 'best quality ', 1, 0, 89, '2023-08-15 15:46:14');
 
 -- --------------------------------------------------------
 
@@ -411,7 +375,7 @@ CREATE TABLE `product_rating` (
   `status` int(11) NOT NULL DEFAULT 0,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `product_rating`
@@ -439,7 +403,7 @@ CREATE TABLE `subscribe` (
   `created_date` datetime NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) NOT NULL,
   `subscriber_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `subscribe`
@@ -467,15 +431,14 @@ CREATE TABLE `users` (
   `pic` varchar(55) NOT NULL,
   `status` int(11) NOT NULL,
   `created_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `mobile`, `mobile_verified`, `password`, `address`, `city`, `pic`, `status`, `created_date`) VALUES
-(1, 'Admin', 'admin@gmail.com', '0', 0, '81dc9bdb52d04dc20036dbd8313ed055', 'Surendra Nagar, Aligarh', 'Aligarh', 'student6.jpg', 0, '2023-08-21 16:25:00'),
-(5, 'Rajat Agrawal', 'rajatagrawal9394@gmail.com', '8191816126', 1, '$2y$10$y1kcSpp.eNecpxDvMoONh.ud4xFB4cE.D.JqzZ/Qn0pG2wqhZRfvS', '', '', '/img/user1.jpg', 1, '2023-08-22 20:16:35');
+(5, 'Rajat Agrawal', 'rajatagrawal9394@gmail.com', '8191816126', 1, '$2y$10$y1kcSpp.eNecpxDvMoONh.ud4xFB4cE.D.JqzZ/Qn0pG2wqhZRfvS', 'Surendra Nagar, Aligarh', 'Aligarh', '/img/user1.jpg', 1, '2023-08-22 20:16:35');
 
 --
 -- Indexes for dumped tables
@@ -498,12 +461,6 @@ ALTER TABLE `admin`
 --
 ALTER TABLE `available_coupons`
   ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `brand`
---
-ALTER TABLE `brand`
-  ADD PRIMARY KEY (`brand_id`);
 
 --
 -- Indexes for table `cart_items`
@@ -589,12 +546,6 @@ ALTER TABLE `available_coupons`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT for table `brand`
---
-ALTER TABLE `brand`
-  MODIFY `brand_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
-
---
 -- AUTO_INCREMENT for table `cart_items`
 --
 ALTER TABLE `cart_items`
@@ -604,7 +555,7 @@ ALTER TABLE `cart_items`
 -- AUTO_INCREMENT for table `category`
 --
 ALTER TABLE `category`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `coupons`
@@ -634,7 +585,7 @@ ALTER TABLE `order_detail`
 -- AUTO_INCREMENT for table `product`
 --
 ALTER TABLE `product`
-  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT for table `product_rating`

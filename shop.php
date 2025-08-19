@@ -37,10 +37,26 @@ if (isset($_POST['wish'])) {
     $item_id = realEscape($_POST['wish']);
 
     $result = use_cart_n_wishlist($item_id, 'WISHLIST');
-    if ($result)
-        echo 1;
-    else
-        echo 0;
+    $items = getCartItems('WISHLIST');
+
+    class Resp
+    {
+        public $num;
+        public $res;
+
+        function set_num($no)
+        {
+            $this->num = $no;
+        }
+        function set_resp($resp)
+        {
+            $this->res = $resp;
+        }
+    }
+    $obj = new Resp();
+    $obj->set_num($items);
+    $obj->set_resp($result);
+    echo json_encode($obj);
     die;
 }
 ?>
@@ -554,10 +570,7 @@ if (isset($_POST['wish'])) {
                     // return;
                     let obj = JSON.parse(data);
                     if (obj.res == true) {
-                        // document.getElementsByClassName('cartCount').innerHTML = '<?= getCartItems() ?>';
-                        // document.querySelectorAll('.cartCount').forEach(function(ele, index) {
-                        //     ele.innerHTML = '<?= getCartItems() ?>';
-                        // });
+                        $('.cartCount').html((obj.num));
                         Swal.fire("Item added in Cart.", "", "success");
                     } else if (obj.res == false) {
                         Swal.fire("Error.", "", "error");
@@ -583,8 +596,9 @@ if (isset($_POST['wish'])) {
                 },
                 success: function(data) {
                     console.log(data);
-                    if (data == '1') {
-                        // document.getElementsByClassName('wishCount').innerHTML = '<?= getCartItems('WISHLIST') ?>';
+                    let obj = JSON.parse(data);
+                    if (obj.res == true) {
+                        $('.wishCount').html((obj.num));
                         Swal.fire("Item Added in Wishlist.", "", "success");
                     } else {
                         Swal.fire("Something went wrong", "", "error");

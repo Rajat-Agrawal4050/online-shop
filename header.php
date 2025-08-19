@@ -14,12 +14,19 @@
          <div class="btn-group">
            <button type="button" class="btn btn-sm btn-light dropdown-toggle" data-toggle="dropdown">My Account</button>
            <div class="dropdown-menu dropdown-menu-right">
+           <?php if (!isset($_SESSION['admin_id'])) { ?>
            <button class="dropdown-item" data-toggle="modal" data-target="#adminLoginModal" type="button">Admin Login</button>
+           <?Php } ?>
 
+           <?php if (!isset($_SESSION['user_id'])) { ?>
              <button class="dropdown-item" data-toggle="modal" data-target="#loginModal" type="button">Sign in</button>
              <button class="dropdown-item" data-toggle="modal" data-target="#SignUpModal" type="button">Sign up</button>
-             <?php if (isset($_SESSION['user_id'])) { ?>
+             <?Php } ?>
+             <?php if (isset($_SESSION['user_id']) && !isset($_SESSION['admin_id'])) { ?>
                <button class="dropdown-item logoutBtn" type="button">Logout (<?= getUserInfo($_SESSION['user_id'])['name'] ?? ''; ?>)</button>
+             <?php } ?>
+             <?php if (isset($_SESSION['user_id']) && isset($_SESSION['admin_id'])) { ?>
+               <button class="dropdown-item logoutBtn" type="button">Logout - <?= getUserInfo($_SESSION['user_id'])['name']. ' (Admin)' ?? ''; ?></button>
              <?php } ?>
            </div>
          </div>
@@ -184,6 +191,7 @@
                  <a href="wishlist" class="dropdown-item">Wish List</a>
                  <a href="checkout" class="dropdown-item">Checkout</a>
                  <a href="my-orders" class="dropdown-item">My Orders</a>
+                 <a href="user_account" class="dropdown-item">My Account</a>
                </div>
              </div>
              <a href="contact" class="nav-item nav-link">Contact</a>
@@ -335,10 +343,10 @@
 
                <form id="adminForm" method="post" action="admin/admin.php">
                  <div class="form-group">
-                   <input type="text" class="form-control" id="uname" name="uname" placeholder="Email" required>
+                   <input type="text" class="form-control" id="admin_email" name="admin_email" placeholder="Email">
                  </div>
                  <div class="form-group">
-                   <input type="password" class="form-control" id="password" name="password" placeholder="password" required>
+                   <input type="password" class="form-control" id="admin_password" name="admin_password" placeholder="password">
                  </div>
                  <button type="submit" id="loginBtn2" class="btn btn-info btn-block btn-round">Login</button>
                </form>

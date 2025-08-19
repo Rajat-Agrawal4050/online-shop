@@ -74,7 +74,7 @@
              $("#registerBtn").html('Loading..');
           },
           success: function(data) {
-              console.log(data);
+             console.log(data);
              $("#registerBtn").removeClass('disabled');
              $("#registerBtn").html('Sign Up');
 
@@ -197,7 +197,7 @@
           },
           beforeSend: function() {},
           success: function(data) {
-
+             console.log(data)
              if (data == '1') {
 
                 Swal.fire({
@@ -307,6 +307,84 @@
 
 
     });
+
+    $(document).on('submit', '#adminForm', function(event) {
+
+       event.preventDefault();
+       var email = $('#admin_email').val();
+       var pass = $('#admin_password').val();
+
+       if (email == '') {
+          Swal.fire("E-mail is Required.", "", "error");
+          return;
+       }
+       if (pass == '') {
+          Swal.fire("Enter a Password.", "", "error");
+          return;
+       }
+
+       $.ajax({
+          url: "login.php",
+          type: "POST",
+          data: {
+             adminLogin: true,
+             email: email,
+             pass: pass
+          },
+          cache: false,
+          beforeSend: function() {
+             $("#loginBtn2").addClass('disabled');
+             $("#loginBtn2").html('Logging..');
+          },
+          success: function(data) {
+             console.log(data);
+             $("#loginBtn2").removeClass('disabled');
+             $("#loginBtn2").html('Login');
+
+             if (data.trim() == '1') {
+
+                Swal.fire("Login Successful.", "", "success");
+                setTimeout(() => {
+                   location.href = './admin/admin.php';
+                }, 1000);
+
+             } else if (data.trim() == '2') {
+                Swal.fire({
+                   icon: "error",
+                   title: "Invalid Credentials.",
+                   text: "Please Try Again !<br>" + email,
+                   showConfirmBtn: true,
+                })
+             } else if (data == '4') {
+                Swal.fire({
+                   icon: "error",
+                   title: "Please Enter a valid Email",
+                   text: "",
+                   showConfirmBtn: true,
+                })
+             } else if (data == '3') {
+                Swal.fire({
+                   icon: "error",
+                   title: "You are not Registered.",
+                   text: "" + email,
+                   showConfirmBtn: true,
+                })
+             } else {
+                Swal.fire({
+                   icon: "error",
+                   title: "Error",
+                   text: "Something went wrong. <br>" + data,
+                   showConfirmBtn: true,
+                })
+             }
+
+          }
+
+       });
+
+
+    });
+
 
     $(document).on('click', '#backBtn', function(e) {
 

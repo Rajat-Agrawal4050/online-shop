@@ -79,16 +79,20 @@ if (isset($_POST['clearCart'])) {
 
 else if (isset($_POST['removeItem'])) {
     if (use_cart_n_wishlist((int)($_POST['removeItem']), 'CART', true)) {
-        echo "1";
+        $result=1;
     } else {
-        echo "0";
+        $result=0;
     }
+    $count = getCartItems();
+    echo json_encode(array('count' => $count, 'result' => $result));
 } else if (isset($_POST['removeWish'])) {
     if (use_cart_n_wishlist((int)($_POST['removeWish']), 'WISHLIST', true)) {
-        echo "1";
+        $result=1;
     } else {
-        echo "0";
+        $result=0;
     }
+    $count = getCartItems('WISHLIST');
+    echo json_encode(array('count' => $count, 'result' => $result));
 } else if (isset($_POST['applyCouponCode'])) {
     $code = realEscape($_POST['applyCouponCode']);
     $data = checkCoupon($code);

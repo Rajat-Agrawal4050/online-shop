@@ -1,17 +1,16 @@
 <?php
+    include("../connection.php");
 
-    include("db_con.php");
-    
-    $p_id=$_POST['record'];
+    $p_id=realEscape($_POST['record']);
     $query="DELETE FROM `product` where `id`='$p_id'";
 
-    $data=mysqli_query($con,$query);
+    $data=mysqli_query($conn,$query);
 
     if($data){
-        echo"Product Item Deleted";
+        echo"1";
     }
     else{
-        echo"Not able to delete";
+        echo"0";
     }
     
 ?>
