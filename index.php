@@ -12,6 +12,10 @@ if (isset($_POST['wish'])) {
     $result = use_cart_n_wishlist($item_id, 'WISHLIST');
     $items = getCartItems('WISHLIST');
 
+    if (!isset($_SESSION['user_id']) && $result === true) {
+        $items += 1;
+    }
+
     class Resp
     {
         public $num;
@@ -39,6 +43,10 @@ if (isset($_POST['item'])) {
 
     $result = use_cart_n_wishlist($item_id, 'CART', false);
     $items = getCartItems();
+
+    if (!isset($_SESSION['user_id']) && $result === true) {
+        $items += 1;
+    }
 
     class Resp
     {

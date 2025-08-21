@@ -79,19 +79,27 @@ if (isset($_POST['clearCart'])) {
 
 else if (isset($_POST['removeItem'])) {
     if (use_cart_n_wishlist((int)($_POST['removeItem']), 'CART', true)) {
-        $result=1;
+        $result = 1;
     } else {
-        $result=0;
+        $result = 0;
     }
     $count = getCartItems();
+
+    if (!isset($_SESSION['user_id']) && $result == '1') {
+        $count -= 1;
+    }
     echo json_encode(array('count' => $count, 'result' => $result));
 } else if (isset($_POST['removeWish'])) {
     if (use_cart_n_wishlist((int)($_POST['removeWish']), 'WISHLIST', true)) {
-        $result=1;
+        $result = 1;
     } else {
-        $result=0;
+        $result = 0;
     }
     $count = getCartItems('WISHLIST');
+
+    if (!isset($_SESSION['user_id']) && $result == '1') {
+        $count -= 1;
+    }
     echo json_encode(array('count' => $count, 'result' => $result));
 } else if (isset($_POST['applyCouponCode'])) {
     $code = realEscape($_POST['applyCouponCode']);
