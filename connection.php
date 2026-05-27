@@ -71,7 +71,7 @@ function errlog($error, $qry)
     echo '<script> location.replace("error.html"); </script>';
 }
 
-function getProductRating($item_id): array
+function getProductRating(?$item_id): ?array
 {
     global $conn;
     $p_rating = 0;
@@ -83,8 +83,11 @@ function getProductRating($item_id): array
         errlog(mysqli_error($conn), $sql);
     } else {
         $res = mysqli_fetch_assoc($res2);
-        $p_rating = round($res['num']);
+        if($res['num']){
+             $p_rating = round($res['num']);
         $review = $res['reviews'];
+        }
+       
     }
 
     return array($p_rating, $review);
