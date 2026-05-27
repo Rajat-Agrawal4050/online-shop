@@ -11,8 +11,12 @@ $site_logo = $this_site_url . '/img/dizital.png';
 $avatar = $this_site_url . '/img/avatar.png';
 $avatar2 = $this_site_url . '/img/avatar2.png';
 
+$host     = getenv('DB_HOST');
+$dbname   = getenv('DB_NAME');
+$username = getenv('DB_USER');
+$password = getenv('DB_PASS');
 
-$conn = mysqli_connect('sql12.freesqldatabase.com', 'sql12828408', 'SexDRvKvb3', 'sql12828408');
+$conn = mysqli_connect($host, $username, $password, $dbname);
 
 if (!$conn) {
     echo "Connection Error.";
