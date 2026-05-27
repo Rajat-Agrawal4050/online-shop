@@ -1,7 +1,7 @@
 <?php 
 
-$key = 'rzp_test_pi2fEEfhC66GKs';
-$secret = 'jzWG8EKZkK9JEQMqjlCaWG7W';
+$key = 'rzp_test_SZpOElbpfSgNYK';
+$secret = '8E6RxNveuydkYKNp1ol6u6s2';
 
 define("RAZORPAY_KEY", $key);
 define("RAZORPAY_SECRET", $secret);

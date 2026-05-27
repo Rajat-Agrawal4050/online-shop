@@ -39,8 +39,8 @@ CREATE TABLE `address` (
   `mobile` text NOT NULL,
   `availability` text NOT NULL,
   `address_type` text DEFAULT NULL,
-  `created_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_date` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `address`
@@ -88,8 +88,8 @@ CREATE TABLE `available_coupons` (
   `discount` float NOT NULL DEFAULT 0,
   `coupon_code` varchar(50) DEFAULT NULL,
   `redeemed` tinyint(2) NOT NULL DEFAULT 0 COMMENT '0->Not redeemed, 1->redeemed',
-  `created_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_date` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `available_coupons`
@@ -112,7 +112,7 @@ CREATE TABLE `cart_items` (
   `qty` int(11) NOT NULL,
   `status` int(11) NOT NULL,
   `save_type` varchar(50) NOT NULL,
-  `created_date` datetime NOT NULL DEFAULT current_timestamp()
+  `created_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -146,7 +146,7 @@ CREATE TABLE `category` (
   `category_type` varchar(50) NOT NULL,
   `parent_category` varchar(100) DEFAULT NULL,
   `image_url` text NOT NULL,
-  `created_date` datetime NOT NULL DEFAULT current_timestamp()
+  `created_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -219,8 +219,8 @@ CREATE TABLE `messages` (
   `msg_type` varchar(50) NOT NULL,
   `attachment` text NOT NULL,
   `status` int(11) NOT NULL,
-  `created_date` datetime NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  `created_date` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `messages`
@@ -287,7 +287,7 @@ CREATE TABLE `order_detail` (
   `discount` int(11) NOT NULL,
   `coupon_discount` int(11) NOT NULL,
   `status` int(11) NOT NULL,
-  `order_date` datetime NOT NULL DEFAULT current_timestamp()
+  `order_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -332,7 +332,7 @@ CREATE TABLE `product` (
   `status` int(11) NOT NULL,
   `label` int(11) NOT NULL COMMENT '0=None,1=featured,2=Sponsored\r\n',
   `views` int(11) NOT NULL,
-  `created_date` datetime NOT NULL DEFAULT current_timestamp()
+  `created_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
@@ -370,8 +370,8 @@ CREATE TABLE `product_rating` (
   `rating` int(11) NOT NULL,
   `title` text NOT NULL,
   `comment` text NOT NULL,
-  `helpful` text DEFAULT '0',
-  `unhelpful` text NOT NULL DEFAULT '0',
+  `helpful` text,
+  `unhelpful` text,
   `status` int(11) NOT NULL DEFAULT 0,
   `created` datetime NOT NULL,
   `modified` datetime NOT NULL
@@ -400,10 +400,10 @@ CREATE TABLE `subscribe` (
   `id` int(11) NOT NULL,
   `email_id` varchar(50) NOT NULL,
   `site_id` int(11) NOT NULL,
-  `created_date` datetime NOT NULL DEFAULT current_timestamp(),
+  `created_date` timestamp NOT NULL DEFAULT current_timestamp(),
   `user_id` int(11) NOT NULL,
   `subscriber_id` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `subscribe`
@@ -430,7 +430,7 @@ CREATE TABLE `users` (
   `city` varchar(20) NOT NULL,
   `pic` varchar(55) NOT NULL,
   `status` int(11) NOT NULL,
-  `created_date` datetime NOT NULL DEFAULT current_timestamp()
+  `created_date` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
