@@ -71,7 +71,7 @@ function errlog($error, $qry)
     echo '<script> location.replace("error.html"); </script>';
 }
 
-function getProductRating(? int|float $item_id): ? array
+function getProductRating(int|float|null $item_id): ?array
 {
     global $conn;
     $p_rating = 0;
