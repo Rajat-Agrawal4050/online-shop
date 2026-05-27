@@ -12,7 +12,7 @@ $avatar = $this_site_url . '/img/avatar.png';
 $avatar2 = $this_site_url . '/img/avatar2.png';
 
 
-$conn = mysqli_connect('localhost', 'root', '', 'onlineshop');
+$conn = mysqli_connect('sql12.freesqldatabase.com', 'sql12828408', 'SexDRvKvb3', 'sql12828408');
 
 if (!$conn) {
     echo "Connection Error.";
