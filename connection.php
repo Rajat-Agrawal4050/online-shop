@@ -13,16 +13,16 @@ $avatar2 = $this_site_url . '/img/avatar2.png';
 
 // local par 
 
-$host     = 'localhost';
-$dbname   = 'onlineshop';
-$username = 'root';
-$password = '';
+// $host     = 'localhost';
+// $dbname   = 'onlineshop';
+// $username = 'root';
+// $password = '';
 
 // Production (Render) ke liye
-// $host     = getenv('DB_HOST');
-// $dbname   = getenv('DB_NAME');
-// $username = getenv('DB_USER');
-// $password = getenv('DB_PASS');
+$host     = getenv('DB_HOST');
+$dbname   = getenv('DB_NAME');
+$username = getenv('DB_USER');
+$password = getenv('DB_PASS');
 
 $conn = mysqli_connect($host, $username, $password, $dbname);
 
