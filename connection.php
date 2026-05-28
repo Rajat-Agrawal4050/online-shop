@@ -5,7 +5,7 @@ $curr_date = date('Y-m-d H:i:s');
 
 $site_name = 'Online Shop';
 
-$this_site_url = 'http://localhost/online-shop';
+$this_site_url = 'https://online-shop-n3va.onrender.com';
 $this_site_id = 2;
 $site_logo = $this_site_url . '/img/dizital.png';
 $avatar = $this_site_url . '/img/avatar.png';
